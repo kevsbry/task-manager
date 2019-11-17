@@ -1,0 +1,93 @@
+.task-input{
+    text-align: center;
+    border-radius: 3px;
+    color: #CED4DA;
+    margin: 20px 0px 10px 0;
+    border-radius: 30px;
+}
+
+.task-title{
+    font-size: 1.6em;
+    font-weight: lighter;
+    color: #757575;
+}
+
+.card-unfinished {
+    margin-top: 20px;
+    border-width: 0px 0px 0px 3px;
+    border-left-color: #1E88E5;
+    border-radius: 3px;
+    box-shadow: 0 3px 5px #BDBDBD;
+}
+
+.card-finished {
+    margin-top: 20px;
+    border-width: 0px 0px 0px 3px;
+    border-left-color: #43A047;
+    border-radius: 3px;
+    box-shadow: 0 3px 5px #BDBDBD;
+}
+
+.task-name{
+    font-family: Helvetica, sans-serif;
+    font-size: 1.2em;
+    color: #757575;
+
+}
+
+.humanize-date{
+    font-family: Helvetica, sans-serif;
+    font-size: 0.7em;
+    text-align: right;
+    color: #757575;
+}
+
+.isCompleted-text {
+    font-family: Helvetica, sans-serif;
+    font-size: 0.9em;
+    text-align: right;
+    color: #757575;
+}
+
+.nopadding {
+    padding: 0 !important;
+    margin: 0 !important;
+ }
+
+ .yes-btn, .no-btn{
+     padding: 0px 8px 0px 8px !important;
+     margin: 0 !important;
+     font-size: 0.8em;
+     border-radius: 20px;
+     border-width: 1px;
+     border-color: #BDBDBD;
+     color: #9E9E9E;
+ }
+
+ .yes-btn:disabled, .no-btn:disabled{
+    padding: 0px 8px 0px 8px !important;
+    margin: 0 !important;
+    font-size: 0.8em;
+    border-radius: 20px;
+    border-width: 1px;
+    border-color: #BDBDBD;
+    color: #9E9E9E;
+}
+
+.delete-btn{
+    color: #757575;
+}
+
+.delete-btn:hover{
+    cursor: pointer;
+}
+.modal-content {
+    border: none !important;
+    border-radius: 3px !important;
+    padding: 0 3px 0 3px !important;
+    width: 80%;
+}
+
+.modal-btn{
+    padding: 0px 6px 0px 6px;
+}

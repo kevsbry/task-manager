@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/static/assets/bootstrap-4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/assets/fontawesome-5.10.1/css/all.min.css">
+    <link rel="stylesheet" href="/static/ui/css/task.css">
+
+    <title>Your Tasks</title>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="row">
+            <div class="col-sm-12 col-md-6 offset-md-3">
+                <input type="text" class="form-control task-input" placeholder="Enter New Task">
+            </div>
+        </div>
+
+        <div class="row">
+                <span class="task-title mx-2">Hello Kevin Bryan! these are your Tasks:</span>
+                
+        </div>
+        
+
+        <div class="row card-container mb-3">
+
+            {{range .}}
+            {{if eq .TaskIsDone false}}
+            <div class=".col-sm-12  col-md-3">
+                <div class="card card-unfinished">
+                    
+                    <div class="card-body"><!--delete-->
+                            <i class="fas fa-times fa-xs float-right delete-btn" task="{{.TaskID}}" data-toggle="modal" data-target="#delete-modal"></i>
+                        <div class="row nopadding">
+                            <span class="task-name">{{.TaskTitle}}</span>
+                        </div>
+                        <div class="row nopadding">
+                            <span class="humanize-date">{{.TaskDateAdded}}</span>
+                        </div>
+                        <hr>
+
+                        <div class="row nopadding">
+                           
+                            <span class="isCompleted-text">completed?</span>&nbsp;
+                            <button type="button" class="btn btn-light yes-btn " task="{{.TaskID}}">Yes</button>&nbsp;
+                            <button type="button" class="btn btn-light no-btn" disabled>No</button>
+                        
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            {{end}}
+            {{end}}
+
+        </div>
+        <hr>
+
+        <div class="row">
+            <span class="task-title">Finished Tasks:</span>
+        </div>
+        
+
+        <div class="row card-container">
+            {{range .}}
+            {{if eq .TaskIsDone true}}
+            <div class="col-sm-12 col-md-3">
+                <div class="card card-finished">
+                    <div class="card-body">
+                        <div class="row nopadding">
+                            <span class="task-name">{{.TaskTitle}}</span>
+                        </div>
+                        <div class="row nopadding">
+                            <span class="humanize-date">{{.TaskDateAdded}}</span>
+                        </div>
+                        <hr>
+
+                        <div class="row nopadding">
+                            
+                            <span class="isCompleted-text">completed?</span>&nbsp;
+                            <button type="button" class="btn btn-light yes-btn " task="{{.TaskID}}" disabled>Yes</button>&nbsp;
+                            <button type="button" class="btn btn-light no-btn" task="{{.TaskID}}">No</button>
+                        
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            {{end}}
+            {{end}}
+        </div>
+        <hr>
+
+    </div>
+
+    <!--Delete Confirmation-->
+      <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+        
+            <div class="modal-body">
+                <div class="d-flex justify-content-center">
+                    <span class="task-name text-center">Are you sure you want to delete this Task?</span>
+                </div>
+            </div>
+            
+                <div class="d-flex flex-row justify-content-center mb-3 mt-0">
+                    <button type="button" class="btn btn-outline-success modal-btn yes-delete mr-3">Yes</button>
+                    <button type="button" class="btn btn-outline-danger modal-btn  m-0" data-dismiss="modal">No</button>
+                </div>
+            
+          </div>
+        </div>
+      </div>
+
+
+    <script src="/static/assets/jquery/jquery-3.4.1.min.js"></script>
+    <script src="/static/assets/bootstrap-4.3.1/js/bootstrap.min.js"></script>
+    
+    <script>
+        var input = $('.task-input');
+        var cardContainer = $('.card-container');
+
+        // ADDING TASK  
+        input.on("keypress", function(e){
+            if(e.which == 13){
+               $.ajax({
+                   url: window.origin + "/api/add",
+                   method: "POST",
+                   data: {title: input.val()},
+                   success: function(data){
+                       location.reload()
+                   },
+                   error: function(x, y, z){
+                       console.log(x, y, z);
+                   }
+               });
+            }
+        });
+
+        // SET TASK Status
+
+        // set task to done
+        var yesButton = $('.yes-btn');
+        yesButton.on('click', function(){
+            var taskID = $(this).attr("task");
+
+            $.ajax({
+                url: window.origin + "/api/setStatus",
+                method: "POST",
+                data: {status: "true", id: taskID},
+                success: function(data) {
+                    console.log("task finished: " + taskID);
+                    location.reload();
+                },
+                error: function(x, y, z){
+                    console.log(x, y, z);
+                }
+            });
+        });
+
+        //set task to not done
+       var noButton = $('.no-btn');
+       noButton.on('click', function(){
+            var taskID = $(this).attr("task");
+
+            $.ajax({
+                url: window.origin + "/api/setStatus",
+                method: "POST",
+                data: {status: "false", id: taskID},
+                success: function(data) {
+                    console.log("task not finished: " + taskID);
+                    location.reload();
+                },
+                error: function(x, y, z){
+                    console.log(x, y, z);
+                }
+            });
+        });
+
+        // delete button
+        var deleteButton = $(".delete-btn");
+        deleteButton.on("click", function(){
+            var taskID = $(this).attr("task");
+            var yesDelete = $(".yes-delete");
+                yesDelete.click(function(){
+                    $.ajax({
+                    url: window.origin + "/api/deleteTask",
+                    method: "POST",
+                    data: {id: taskID},
+                    success: function(data){
+                        location.reload();
+                    },
+                    error: function(x, y, z) {
+                        console.log(x, y, z);
+                    }
+                });
+            })
+        });
+
+    </script>
+
+</body>
+</html>
